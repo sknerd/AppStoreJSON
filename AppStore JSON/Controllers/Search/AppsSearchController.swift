@@ -53,12 +53,12 @@ class AppsSearchController: BaseListController, UICollectionViewDelegateFlowLayo
         timer?.invalidate()
         
         timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { (_) in
-            Service.shared.fetchApps(searchTerm: searchText) { (results, err) in
+            Service.shared.fetchApps(searchTerm: searchText) { (res, err) in
                 if let err = err {
                     print("Failed to fetch search results:", err)
                     return
                 }
-                self.appResults = results
+                self.appResults = res?.results ?? []
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
@@ -67,17 +67,23 @@ class AppsSearchController: BaseListController, UICollectionViewDelegateFlowLayo
     }
     
     fileprivate func fetchItunesApps() {
-        Service.shared.fetchApps(searchTerm: "Twitter") { (results, err)  in
+        Service.shared.fetchApps(searchTerm: "Twitter") { (res, err)  in
             
             if let err = err {
                 print("Failed to fetch apps:", err)
             }
             
-            self.appResults = results
+            self.appResults = res?.results ?? []
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
             }
         }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let appId = String(appResults[indexPath.item].trackId)
+        let appDetailController = AppDetailController(appId: appId)
+        navigationController?.pushViewController(appDetailController, animated: true)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

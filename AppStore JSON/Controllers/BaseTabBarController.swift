@@ -14,9 +14,9 @@ class BaseTabBarController: UITabBarController {
         super.viewDidLoad()
         
         viewControllers = [
+            createNavController(viewController: TodayController(), title: "Today", imageName: "doc.plaintext"),
             createNavController(viewController: AppsPageController(), title: "Apps", imageName: "square.stack.3d.up.fill"),
-            createNavController(viewController: AppsSearchController(), title: "Search", imageName: "magnifyingglass"),
-            createNavController(viewController: UIViewController(), title: "Today", imageName: "doc.plaintext")
+            createNavController(viewController: AppsSearchController(), title: "Search", imageName: "magnifyingglass")
         ]
         
     }
